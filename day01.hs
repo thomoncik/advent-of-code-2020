@@ -1,8 +1,10 @@
+import Data.List
+
 part1 :: [Integer] -> Integer
-part1 input = head [i * j | i <- input, j <- input, i + j == 2020]
+part1 input = head [x * y | x:xs <- tails input, y <- xs, x + y == 2020]
 
 part2 :: [Integer] -> Integer
-part2 input = head [i * j * k | i <- input, j <- input, k <- input, k + i + j == 2020]
+part2 input = head [x * y * z | x:xs <- tails input, y:ys <- tails xs, z <- ys, x + y + z == 2020]
 
 main :: IO ()
 main = do

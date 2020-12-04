@@ -2,22 +2,17 @@ import Data.List.Split
 import qualified Data.Map as Map
 import Data.Char (isDigit)
 
-readCsvIntegers :: String -> [Integer]
-readCsvIntegers = map read . Data.List.Split.splitOn " "
-
 pairs :: [a] -> [(a, a)]
-pairs [] = []
 pairs (x:y:xs) = (x, y):(pairs xs)
 pairs _ = []
 
 parseLine :: String -> Map.Map String String
-parseLine = Map.fromList . pairs . Data.List.Split.splitOneOf ": "
+parseLine = Map.fromList . pairs . Data.List.Split.splitOneOf ": \n"
 
 valid :: Map.Map String String -> Bool
 valid x = all (== True) . map (`Map.member` x) $ ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"]
 
 part1 =  length . filter (== True) . map (valid . parseLine)
-
 
 betterValid :: Map.Map String String -> Bool
 betterValid x = all (== True) [byr, iyr, eyr, hgt, hcl, ecl, pid]
@@ -35,16 +30,16 @@ validHeight h
   | fmt && y == "in" = v >= 59 && v <= 76
   | otherwise = False
   where
-    fmt = (length x == 3) && if all isDigit . head $ x then True else False
-    x = Data.List.Split.splitWhen (not . isDigit) $ h
+    fmt = h == (x ++ y)
+    x = takeWhile isDigit h
     y = dropWhile isDigit h
-    v = read (takeWhile isDigit h) :: Integer
+    v = read x :: Integer
 
 part2 =  length . filter (== True) . map betterValid . filter valid . map parseLine
 
 main :: IO ()
 main = do
   str <- readFile "input.txt"
-  let input = map (map (\x -> if x == '\n' then ' ' else x)) . Data.List.Split.splitOn "\n\n" $ str
+  let input = Data.List.Split.splitOn "\n\n" str
   print $ part1 input
   print $ part2 input

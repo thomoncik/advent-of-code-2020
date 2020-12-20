@@ -49,9 +49,15 @@ corner tile allTiles =
   List.filter ((== True) . fst) . List.map (\b -> (tilesMatch tile b, tileId b)) $
   allTiles
 
+zipWith2dIndex :: [[a]] -> [((Int, Int), a)]
+zipWith2dIndex xss = [((i, j), x) | (j, xs) <- zip [0 ..] xss, (i, x) <- zip [0 ..] xs]
+
 main :: IO ()
 main = do
   str <- readFile "input.txt"
   let input = str
   let foo = List.map lines . Split.splitOn "\n\n" $ input
   print $ product . List.map fst . List.filter snd . List.map (\x -> (tileId x, corner x foo)) $ foo
+  
+  let seaFields = length . List.filter (== '#') . List.concatMap (\t -> [v | ((x,y),v) <- zipWith2dIndex (tail t), x /= 0 && y /= 0 && y /= 9 && x /= 9]) . List.map lines . Split.splitOn "\n\n" $ input
+  print $ [seaFields - i * 15 | i <- [32..64]]

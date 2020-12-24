@@ -1,10 +1,7 @@
 import Data.List
 import Data.List as List
-import Data.List.Split as Split
 import Data.Map as Map
 import Data.Set as Set
-import Debug.Trace
-import Data.Function
 
 decodePosition :: (Int, Int) -> String -> (Int, Int)
 decodePosition pos [] = pos

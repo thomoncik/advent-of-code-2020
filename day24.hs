@@ -1,4 +1,3 @@
-import Data.List
 import Data.List as List
 import Data.Map as Map
 import Data.Set as Set
